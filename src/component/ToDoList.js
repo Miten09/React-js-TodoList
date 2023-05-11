@@ -45,35 +45,49 @@ function ToDoList() {
     });
   }
 
+  function hanldeUndoneChange(e, done, index) {
+    const checked = e.target.checked;
+    const value = e.target.value;
+    console.log(checked, done, index);
+    if (!checked) {
+      let b = done.splice(index, 1);
+      setdone([done.splice(value, 1), ...done]);
+      list.push(...b);
+    }
+  }
+
   return (
     <>
-      <form
-        style={{ textAlign: "center", margin: "20px" }}
-        onSubmit={handleClick}
+      <h2
+        style={{
+          textAlign: "center",
+          color: "orange",
+          backgroundColor: "black",
+        }}
       >
-        <label>Your trip : </label>
+        Trip ToDo List
+      </h2>
+      <form style={{ margin: "20px" }} onSubmit={handleClick}>
         <TextField
           id="outlined-basic"
-          label="Add Your trip"
+          label="Add Your Trip Here"
           variant="outlined"
           value={trip}
+          style={{ marginLeft: "42%" }}
           onChange={handleChange}
           required
         />
         &nbsp;&nbsp;&nbsp;&nbsp;
-        <Button variant="contained" type="submit" color="success">
-          Success
-        </Button>
       </form>
-      <p style={{ marginLeft: "45%" }}>Todo Task</p>
+      <p style={{ marginLeft: "47%" }}>Pending Trip</p>
       {list.map((value, index) => {
         return (
           <ul
-            style={{ marginLeft: "35%", padding: "1%", textAlign: "center" }}
+            style={{ marginLeft: "42%", textAlign: "center" }}
             key={index}
-            className="list-group w-25 p-0"
+            className="list-group w-25 p-0 "
           >
-            <li className="list-group-item d-flex justify-content-around">
+            <li className="list-group-item d-flex col-sm-8 justify-content-around">
               <input
                 type="checkbox"
                 name="trip"
@@ -95,21 +109,22 @@ function ToDoList() {
         );
       })}
       <hr />
-      <p style={{ marginLeft: "45%" }}>Done Task</p>
+      <p style={{ marginLeft: "47%" }}>Done Trip</p>
       {done.map((value, index) => {
         return (
           <ul
-            style={{ marginLeft: "35%", padding: "1%", textAlign: "center" }}
+            style={{ marginLeft: "42%", textAlign: "center" }}
             key={index}
             className="list-group w-25 p-0"
           >
-            <li className="list-group-item d-flex justify-content-around">
+            <li className="list-group-item d-flex col-sm-8 justify-content-around">
               <input
                 type="checkbox"
                 checked
                 name="trip"
                 id="trip"
                 value={value}
+                onChange={(e) => hanldeUndoneChange(e, done, index)}
               />
               <div>{value} </div>
               <button
