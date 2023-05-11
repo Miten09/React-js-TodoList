@@ -68,46 +68,59 @@ function ToDoList() {
       <p style={{ marginLeft: "45%" }}>Todo Task</p>
       {list.map((value, index) => {
         return (
-          <div
-            style={{ display: "flex", marginLeft: "42%", padding: "1%" }}
+          <ul
+            style={{ marginLeft: "35%", padding: "1%", textAlign: "center" }}
             key={index}
+            className="list-group w-25 p-0"
           >
-            <input
-              type="checkbox"
-              name="trip"
-              id="trip"
-              value={value}
-              onChange={(e) => handleTrip(e, list, index)}
-            />
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <div>{value} </div>&nbsp;&nbsp;&nbsp;
-            <button
-              type="button"
-              class="btn btn-danger"
-              onClick={() => handleDelete(index)}
-            >
-              Delete
-            </button>
-          </div>
+            <li className="list-group-item d-flex justify-content-around">
+              <input
+                type="checkbox"
+                name="trip"
+                id="trip"
+                value={value}
+                onChange={(e) => handleTrip(e, list, index)}
+              />
+
+              <div>{value} </div>
+              <button
+                type="button"
+                class="btn btn-danger"
+                onClick={() => handleDelete(index)}
+              >
+                Delete
+              </button>
+            </li>
+          </ul>
         );
       })}
       <hr />
       <p style={{ marginLeft: "45%" }}>Done Task</p>
       {done.map((value, index) => {
         return (
-          <div
-            style={{ display: "flex", marginLeft: "42%", padding: "1%" }}
+          <ul
+            style={{ marginLeft: "35%", padding: "1%", textAlign: "center" }}
             key={index}
+            className="list-group w-25 p-0"
           >
-            <div>{value}</div>&nbsp;&nbsp;&nbsp;&nbsp;
-            <button
-              type="button"
-              class="btn btn-danger"
-              onClick={() => handleDeleteDone(index)}
-            >
-              Delete
-            </button>
-          </div>
+            <li className="list-group-item d-flex justify-content-around">
+              <input
+                type="checkbox"
+                checked
+                name="trip"
+                id="trip"
+                value={value}
+              />
+              <div>{value} </div>
+              <button
+                type="button"
+                class="btn btn-danger"
+                onClick={() => handleDeleteDone(index)}
+              >
+                Delete
+              </button>
+            </li>
+          </ul>
         );
       })}
     </>
