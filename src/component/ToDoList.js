@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { Button, TextField } from "@mui/material";
+import { Grid, TextField } from "@mui/material";
+import { DeleteForever } from "@mui/icons-material";
+import { red } from "@mui/material/colors";
 
 function ToDoList() {
   const [trip, settrip] = useState("");
@@ -29,33 +31,42 @@ function ToDoList() {
 
   function handleTrip(e, list, index) {
     const checked = e.target.checked;
-    const value = e.target.value;
     if (checked) {
       let a = list.splice(index, 1);
-      setlist([list.splice(value, 1), ...list]);
-      done.push(...a);
+      setlist(list);
+      // const dummy = done
+      // dummy.push(...a)
+      // setdone(dummy)
+      setdone([...done, ...a]);
     }
   }
-
+  // setstate async
   function handleDeleteDone(id) {
     setdone((olditems) => {
       return olditems.filter((value, index) => {
         return index !== id;
       });
     });
+    // setdone(done.filter((value, index) => index !== id))
   }
 
   function hanldeUndoneChange(e, done, index) {
     const checked = e.target.checked;
-    const value = e.target.value;
-    console.log(checked, done, index);
     if (!checked) {
       let b = done.splice(index, 1);
-      setdone([done.splice(value, 1), ...done]);
-      list.push(...b);
+      setdone(done);
+      setlist([...list, ...b]);
     }
   }
 
+  function handleSort(e) {
+    let value = e.target.value;
+    if (value === "Earlier First") {
+      setlist([...list].sort());
+    } else if (value === "Later First") {
+      setlist([...list].sort().reverse());
+    }
+  }
   return (
     <>
       <h2
@@ -77,7 +88,14 @@ function ToDoList() {
           onChange={handleChange}
           required
         />
-        &nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <select style={{ padding: "8px" }} onChange={handleSort}>
+          <option value="Sortby" default>
+            Sort by
+          </option>
+          <option value="Earlier First">Ascending</option>
+          <option value="Later First">Descending</option>
+        </select>
       </form>
       <p style={{ marginLeft: "47%" }}>Pending Trip</p>
       {list.map((value, index) => {
@@ -87,23 +105,25 @@ function ToDoList() {
             key={index}
             className="list-group w-25 p-0 "
           >
-            <li className="list-group-item d-flex col-sm-8 justify-content-around">
-              <input
-                type="checkbox"
-                name="trip"
-                id="trip"
-                value={value}
-                onChange={(e) => handleTrip(e, list, index)}
-              />
+            <li className="list-group-item col-sm-7 ">
+              <div className="d-flex justify-content-around">
+                <div className="d-flex p-2" style={{ marginRight: "30%" }}>
+                  <input
+                    type="checkbox"
+                    name="trip"
+                    id="trip"
+                    value={value}
+                    onChange={(e) => handleTrip(e, list, index)}
+                  />
 
-              <div>{value} </div>
-              <button
-                type="button"
-                class="btn btn-danger"
-                onClick={() => handleDelete(index)}
-              >
-                Delete
-              </button>
+                  <div style={{ marginLeft: "5px" }}>{value} </div>
+                </div>
+                <div>
+                  <Grid item xs={8} sx={{ color: red[900] }}>
+                    <DeleteForever onClick={() => handleDelete(index)} />
+                  </Grid>
+                </div>
+              </div>
             </li>
           </ul>
         );
@@ -117,23 +137,26 @@ function ToDoList() {
             key={index}
             className="list-group w-25 p-0"
           >
-            <li className="list-group-item d-flex col-sm-8 justify-content-around">
-              <input
-                type="checkbox"
-                checked
-                name="trip"
-                id="trip"
-                value={value}
-                onChange={(e) => hanldeUndoneChange(e, done, index)}
-              />
-              <div>{value} </div>
-              <button
-                type="button"
-                class="btn btn-danger"
-                onClick={() => handleDeleteDone(index)}
-              >
-                Delete
-              </button>
+            <li className="list-group-item col-sm-7 ">
+              <div className="d-flex justify-content-around">
+                <div className="d-flex p-2" style={{ marginRight: "30%" }}>
+                  <input
+                    type="checkbox"
+                    checked
+                    name="trip"
+                    id="trip"
+                    value={value}
+                    onChange={(e) => hanldeUndoneChange(e, done, index)}
+                  />
+
+                  <div style={{ marginLeft: "5px" }}>{value} </div>
+                </div>
+                <div>
+                  <Grid item xs={8} sx={{ color: red[900] }}>
+                    <DeleteForever onClick={() => handleDeleteDone(index)} />
+                  </Grid>
+                </div>
+              </div>
             </li>
           </ul>
         );
