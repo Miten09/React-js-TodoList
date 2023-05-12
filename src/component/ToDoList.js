@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Grid, TextField } from "@mui/material";
-import { DeleteForever } from "@mui/icons-material";
+import { DeleteForever, Height } from "@mui/icons-material";
 import { red } from "@mui/material/colors";
 
 function ToDoList() {
@@ -32,8 +32,14 @@ function ToDoList() {
   function handleTrip(e, list, index) {
     const checked = e.target.checked;
     if (checked) {
-      let a = list.splice(index, 1);
-      setlist(list);
+      let a = list.slice(index, index + 1);
+      // setlist(list);
+      setlist((olditems) => {
+        return olditems.filter((value, index) => {
+          const checkedvalue = e.target.value;
+          return checkedvalue !== value;
+        });
+      });
       // const dummy = done
       // dummy.push(...a)
       // setdone(dummy)
@@ -53,8 +59,14 @@ function ToDoList() {
   function hanldeUndoneChange(e, done, index) {
     const checked = e.target.checked;
     if (!checked) {
-      let b = done.splice(index, 1);
-      setdone(done);
+      let b = done.slice(index, index + 1);
+      // setdone(done);
+      setdone((olditems) => {
+        return olditems.filter((value, index) => {
+          const checkedvalue = e.target.value;
+          return checkedvalue !== value;
+        });
+      });
       setlist([...list, ...b]);
     }
   }
@@ -85,6 +97,11 @@ function ToDoList() {
           variant="outlined"
           value={trip}
           style={{ marginLeft: "42%" }}
+          inputProps={{
+            style: {
+              height: "15px",
+            },
+          }}
           onChange={handleChange}
           required
         />
@@ -101,13 +118,13 @@ function ToDoList() {
       {list.map((value, index) => {
         return (
           <ul
-            style={{ marginLeft: "42%", textAlign: "center" }}
+            style={{ marginLeft: "43%", textAlign: "center" }}
             key={index}
             className="list-group w-25 p-0 "
           >
             <li className="list-group-item col-sm-7 ">
               <div className="d-flex justify-content-around">
-                <div className="d-flex p-2" style={{ marginRight: "30%" }}>
+                <div className="d-flex p-2 " style={{ marginRight: "30%" }}>
                   <input
                     type="checkbox"
                     name="trip"
@@ -133,7 +150,7 @@ function ToDoList() {
       {done.map((value, index) => {
         return (
           <ul
-            style={{ marginLeft: "42%", textAlign: "center" }}
+            style={{ marginLeft: "43%", textAlign: "center" }}
             key={index}
             className="list-group w-25 p-0"
           >
