@@ -66,7 +66,6 @@ function ToDoList() {
         }}
       >
         Trip ToDo List
-        
       </h2>
       <form style={{ margin: "20px" }} onSubmit={handleClick}>
         <TextField
