@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Grid, TextField } from "@mui/material";
-import { DeleteForever, Height } from "@mui/icons-material";
+import { DeleteForever } from "@mui/icons-material";
 import { red } from "@mui/material/colors";
+import ListComponent from "./ListComponent";
 
 function ToDoList() {
   const [trip, settrip] = useState("");
   const [list, setlist] = useState([]);
   const [done, setdone] = useState([]);
+  const [sureDelete, setsureDelete] = useState(false);
+  const [sureUpdate, setsureUpdate] = useState(false);
 
   function handleChange(e) {
     settrip(e.target.value);
@@ -21,12 +24,9 @@ function ToDoList() {
     settrip("");
   }
 
-  function handleDelete(id) {
-    setlist((olditems) => {
-      return olditems.filter((value, index) => {
-        return index !== id;
-      });
-    });
+  function handleDelete(index) {
+    setsureDelete(true);
+    localStorage.setItem("id", index);
   }
 
   function handleTrip(e, list, index) {
@@ -53,7 +53,6 @@ function ToDoList() {
         return index !== id;
       });
     });
-    // setdone(done.filter((value, index) => index !== id))
   }
 
   function hanldeUndoneChange(e, done, index) {
@@ -78,6 +77,47 @@ function ToDoList() {
     } else if (value === "Later First") {
       setlist([...list].sort().reverse());
     }
+  }
+
+  function handleEdit(value, index) {
+    localStorage.setItem("value", value);
+    localStorage.setItem("id", index);
+    settrip(localStorage.getItem("value"));
+    setsureUpdate(true);
+    // console.log(index);
+  }
+
+  function handleSureDelete() {
+    let c = localStorage.getItem("id");
+    console.log(c);
+    setlist((olditems) => {
+      return olditems.filter((value, index) => {
+        return index != c;
+      });
+    });
+    setsureDelete(false);
+  }
+
+  function handleEditDone(value, index) {
+    localStorage.setItem("value", value);
+    localStorage.setItem("id", index);
+    settrip(localStorage.getItem("value"));
+    setsureUpdate(true);
+  }
+
+  function handleUpdate() {
+    let b = localStorage.getItem("id");
+    console.log(b);
+    let updatedList = list.map((value, index) => {
+      if (index == b) {
+        return trip;
+      } else {
+        return value;
+      }
+    });
+    setlist(updatedList);
+    setsureUpdate(false);
+    settrip("");
   }
   return (
     <>
@@ -105,6 +145,12 @@ function ToDoList() {
           onChange={handleChange}
           required
         />
+        &nbsp;&nbsp;&nbsp;
+        {sureUpdate && (
+          <button type="button" class="btn btn-success" onClick={handleUpdate}>
+            Update
+          </button>
+        )}
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <select style={{ padding: "8px" }} onChange={handleSort}>
           <option value="Sortby" default>
@@ -115,39 +161,21 @@ function ToDoList() {
         </select>
       </form>
       <p style={{ marginLeft: "47%" }}>Pending Trip</p>
-      {list.map((value, index) => {
-        return (
-          <ul
-            style={{ marginLeft: "43%", textAlign: "center" }}
-            key={index}
-            className="list-group w-25 p-0 "
-          >
-            <li className="list-group-item col-sm-7 ">
-              <div className="d-flex justify-content-around">
-                <div className="d-flex p-2 " style={{ marginRight: "30%" }}>
-                  <input
-                    type="checkbox"
-                    name="trip"
-                    id="trip"
-                    value={value}
-                    onChange={(e) => handleTrip(e, list, index)}
-                  />
-
-                  <div style={{ marginLeft: "5px" }}>{value} </div>
-                </div>
-                <div>
-                  <Grid item xs={8} sx={{ color: red[900] }}>
-                    <DeleteForever onClick={() => handleDelete(index)} />
-                  </Grid>
-                </div>
-              </div>
-            </li>
-          </ul>
-        );
-      })}
+      <ListComponent
+        list={list}
+        handleTrip={handleTrip}
+        handleDelete={handleDelete}
+        handleEdit={handleEdit}
+      />
       <hr />
       <p style={{ marginLeft: "47%" }}>Done Trip</p>
-      {done.map((value, index) => {
+      <ListComponent
+        list={done}
+        handleTrip={hanldeUndoneChange}
+        handleDelete={handleDeleteDone}
+        handleEdit={handleEditDone}
+      />
+      {/* {done.map((value, index) => {
         return (
           <ul
             style={{ marginLeft: "43%", textAlign: "center" }}
@@ -172,12 +200,43 @@ function ToDoList() {
                   <Grid item xs={8} sx={{ color: red[900] }}>
                     <DeleteForever onClick={() => handleDeleteDone(index)} />
                   </Grid>
+                  <Grid item xs={8} sx={{ color: red[900] }}>
+                    <DeleteForever onClick={() => handleEditDone(index)} />
+                  </Grid>
                 </div>
               </div>
             </li>
           </ul>
         );
-      })}
+      })} */}
+      {/* {sureDelete && <DeleteSure close={setsureDelete} list={list} />} */}
+
+      {sureDelete && (
+        <>
+          <div className="modal-wrapper"></div>
+          <div className="modal-container">
+            <h3>Are You Sure ? </h3>
+            <span>This Task will deleted permanentely</span>
+            <br />
+            <br />
+            <button
+              type="button"
+              class="btn btn-warning"
+              onClick={handleSureDelete}
+            >
+              Yes
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button
+              type="button"
+              class="btn btn-info"
+              onClick={() => setsureDelete(false)}
+            >
+              No
+            </button>
+          </div>
+        </>
+      )}
     </>
   );
 }
