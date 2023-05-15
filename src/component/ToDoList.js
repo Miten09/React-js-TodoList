@@ -3,6 +3,7 @@ import { Grid, TextField } from "@mui/material";
 import { DeleteForever } from "@mui/icons-material";
 import { red } from "@mui/material/colors";
 import ListComponent from "./ListComponent";
+import DeleteModal from "./DeleteModal";
 
 function ToDoList() {
   const [trip, settrip] = useState("");
@@ -10,6 +11,7 @@ function ToDoList() {
   const [done, setdone] = useState([]);
   const [sureDelete, setsureDelete] = useState(false);
   const [sureUpdate, setsureUpdate] = useState(false);
+  const [sureDoneUpdate, setsureDoneUpdate] = useState(false);
 
   function handleChange(e) {
     settrip(e.target.value);
@@ -48,6 +50,9 @@ function ToDoList() {
   }
   // setstate async
   function handleDeleteDone(id) {
+    // setsureDelete(true);
+    localStorage.setItem("id", id);
+
     setdone((olditems) => {
       return olditems.filter((value, index) => {
         return index !== id;
@@ -98,11 +103,22 @@ function ToDoList() {
     setsureDelete(false);
   }
 
+  function handleSureDoneDelete() {
+    let c = localStorage.getItem("id");
+    console.log(c);
+    setdone((olditems) => {
+      return olditems.filter((value, index) => {
+        return index != c;
+      });
+    });
+    setsureDelete(false);
+  }
+
   function handleEditDone(value, index) {
     localStorage.setItem("value", value);
     localStorage.setItem("id", index);
     settrip(localStorage.getItem("value"));
-    setsureUpdate(true);
+    setsureDoneUpdate(true);
   }
 
   function handleUpdate() {
@@ -117,6 +133,21 @@ function ToDoList() {
     });
     setlist(updatedList);
     setsureUpdate(false);
+    settrip("");
+  }
+
+  function handleDoneUpdate() {
+    let g = localStorage.getItem("id");
+    console.log(g);
+    let updatedList = done.map((value, index) => {
+      if (index == g) {
+        return trip;
+      } else {
+        return value;
+      }
+    });
+    setdone(updatedList);
+    setsureDoneUpdate(false);
     settrip("");
   }
   return (
@@ -148,6 +179,15 @@ function ToDoList() {
         &nbsp;&nbsp;&nbsp;
         {sureUpdate && (
           <button type="button" class="btn btn-success" onClick={handleUpdate}>
+            Update
+          </button>
+        )}
+        {sureDoneUpdate && (
+          <button
+            type="button"
+            class="btn btn-success"
+            onClick={handleDoneUpdate}
+          >
             Update
           </button>
         )}
@@ -210,32 +250,11 @@ function ToDoList() {
         );
       })} */}
       {/* {sureDelete && <DeleteSure close={setsureDelete} list={list} />} */}
-
       {sureDelete && (
-        <>
-          <div className="modal-wrapper"></div>
-          <div className="modal-container">
-            <h3>Are You Sure ? </h3>
-            <span>This Task will deleted permanentely</span>
-            <br />
-            <br />
-            <button
-              type="button"
-              class="btn btn-warning"
-              onClick={handleSureDelete}
-            >
-              Yes
-            </button>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <button
-              type="button"
-              class="btn btn-info"
-              onClick={() => setsureDelete(false)}
-            >
-              No
-            </button>
-          </div>
-        </>
+        <DeleteModal
+          surePendingdelete={handleSureDelete}
+          deleted={setsureDelete}
+        />
       )}
     </>
   );
