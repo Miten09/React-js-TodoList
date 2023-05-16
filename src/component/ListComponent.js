@@ -4,7 +4,7 @@ import { green, red } from "@mui/material/colors";
 import { DeleteForever } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 
-function ListComponent({ list, handleTrip, handleDelete, handleEdit }) {
+function ListComponent({ list, handleTrip, handleDelete, handleEdit, done }) {
   return (
     <>
       {list.map((value, index) => {
@@ -20,6 +20,7 @@ function ListComponent({ list, handleTrip, handleDelete, handleEdit }) {
                   <input
                     type="checkbox"
                     name="trip"
+                    checked={done ? true : false}
                     id="trip"
                     value={value}
                     onChange={(e) => handleTrip(e, list, index)}
@@ -34,7 +35,7 @@ function ListComponent({ list, handleTrip, handleDelete, handleEdit }) {
                 </div>
                 <div>
                   <Grid item xs={8} sx={{ color: red[900] }}>
-                    <DeleteForever onClick={() => handleDelete(index)} />
+                  <DeleteForever onClick={() => handleDelete(index)} />
                   </Grid>
                 </div>
               </div>

@@ -26,8 +26,19 @@ function ToDoList() {
     settrip("");
   }
 
-  function handleDelete(index) {
-    setsureDelete(true);
+  function handleDelete(index, value) {
+    // if (type === "list") {
+    //   // list delete
+    // } else {
+    //   //done delete
+    // }
+    console.log(index, value);
+    if (value == "list") {
+      setsureDelete(true);
+    } else {
+      setsureDelete(true);
+    }
+    // console.log(index);
     localStorage.setItem("id", index);
   }
 
@@ -50,7 +61,6 @@ function ToDoList() {
   }
   // setstate async
   function handleDeleteDone(id) {
-    // setsureDelete(true);
     localStorage.setItem("id", id);
 
     setdone((olditems) => {
@@ -204,52 +214,19 @@ function ToDoList() {
       <ListComponent
         list={list}
         handleTrip={handleTrip}
-        handleDelete={handleDelete}
+        handleDelete={(index, type) => handleDelete(index, "list")}
         handleEdit={handleEdit}
       />
       <hr />
       <p style={{ marginLeft: "47%" }}>Done Trip</p>
       <ListComponent
+        done={true}
         list={done}
         handleTrip={hanldeUndoneChange}
+        // handleDelete={(index, type) => handleDelete(index, "done")}
         handleDelete={handleDeleteDone}
         handleEdit={handleEditDone}
       />
-      {/* {done.map((value, index) => {
-        return (
-          <ul
-            style={{ marginLeft: "43%", textAlign: "center" }}
-            key={index}
-            className="list-group w-25 p-0"
-          >
-            <li className="list-group-item col-sm-7 ">
-              <div className="d-flex justify-content-around">
-                <div className="d-flex p-2" style={{ marginRight: "30%" }}>
-                  <input
-                    type="checkbox"
-                    checked
-                    name="trip"
-                    id="trip"
-                    value={value}
-                    onChange={(e) => hanldeUndoneChange(e, done, index)}
-                  />
-
-                  <div style={{ marginLeft: "5px" }}>{value} </div>
-                </div>
-                <div>
-                  <Grid item xs={8} sx={{ color: red[900] }}>
-                    <DeleteForever onClick={() => handleDeleteDone(index)} />
-                  </Grid>
-                  <Grid item xs={8} sx={{ color: red[900] }}>
-                    <DeleteForever onClick={() => handleEditDone(index)} />
-                  </Grid>
-                </div>
-              </div>
-            </li>
-          </ul>
-        );
-      })} */}
-      {/* {sureDelete && <DeleteSure close={setsureDelete} list={list} />} */}
       {sureDelete && (
         <DeleteModal
           surePendingdelete={handleSureDelete}

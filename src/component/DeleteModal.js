@@ -1,6 +1,6 @@
 import React from "react";
 
-function DeleteModal({ deleted, surePendingdelete }) {
+function DeleteModal({ deleted, surePendingdelete, sureDoneDelete }) {
   return (
     <>
       <div className="modal-wrapper"></div>
