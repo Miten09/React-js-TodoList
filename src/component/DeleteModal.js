@@ -1,6 +1,7 @@
 import React from "react";
 
 function DeleteModal({ deleted, surePendingdelete, sureDoneDelete }) {
+  console.log('deleted modal')
   return (
     <>
       <div className="modal-wrapper"></div>

@@ -35,7 +35,7 @@ function ListComponent({ list, handleTrip, handleDelete, handleEdit, done }) {
                 </div>
                 <div>
                   <Grid item xs={8} sx={{ color: red[900] }}>
-                  <DeleteForever onClick={() => handleDelete(index)} />
+                    <DeleteForever onClick={() => handleDelete(index)} />
                   </Grid>
                 </div>
               </div>

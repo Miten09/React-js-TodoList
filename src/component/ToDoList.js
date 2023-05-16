@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Grid, TextField } from "@mui/material";
 import { DeleteForever } from "@mui/icons-material";
 import { red } from "@mui/material/colors";
@@ -12,6 +12,8 @@ function ToDoList() {
   const [sureDelete, setsureDelete] = useState(false);
   const [sureUpdate, setsureUpdate] = useState(false);
   const [sureDoneUpdate, setsureDoneUpdate] = useState(false);
+
+  console.log("trip");
 
   function handleChange(e) {
     settrip(e.target.value);
@@ -42,24 +44,46 @@ function ToDoList() {
     localStorage.setItem("id", index);
   }
 
-  function handleTrip(e, list, index) {
-    const checked = e.target.checked;
-    if (checked) {
-      let a = list.slice(index, index + 1);
-      // setlist(list);
-      setlist((olditems) => {
-        return olditems.filter((value, index) => {
-          const checkedvalue = e.target.value;
-          return checkedvalue !== value;
+  const handleTrip = useCallback(
+    (e, list, index) => {
+      const checked = e.target.checked;
+      if (checked) {
+        let a = list.slice(index, index + 1);
+        // setlist(list);
+        setlist((olditems) => {
+          return olditems.filter((value, index) => {
+            const checkedvalue = e.target.value;
+            return checkedvalue !== value;
+          });
         });
-      });
-      // const dummy = done
-      // dummy.push(...a)
-      // setdone(dummy)
-      setdone([...done, ...a]);
-    }
-  }
+        // const dummy = done
+        // dummy.push(...a)
+        // setdone(dummy)
+        setdone([...done, ...a]);
+      }
+    },
+    [list]
+  );
+
+  // function handleTrip(e, list, index) {
+  //   const checked = e.target.checked;
+  //   if (checked) {
+  //     let a = list.slice(index, index + 1);
+  //     // setlist(list);
+  //     setlist((olditems) => {
+  //       return olditems.filter((value, index) => {
+  //         const checkedvalue = e.target.value;
+  //         return checkedvalue !== value;
+  //       });
+  //     });
+  //     // const dummy = done
+  //     // dummy.push(...a)
+  //     // setdone(dummy)
+  //     setdone([...done, ...a]);
+  //   }
+  // }
   // setstate async
+
   function handleDeleteDone(id) {
     localStorage.setItem("id", id);
 
@@ -69,21 +93,39 @@ function ToDoList() {
       });
     });
   }
-
-  function hanldeUndoneChange(e, done, index) {
-    const checked = e.target.checked;
-    if (!checked) {
-      let b = done.slice(index, index + 1);
-      // setdone(done);
-      setdone((olditems) => {
-        return olditems.filter((value, index) => {
-          const checkedvalue = e.target.value;
-          return checkedvalue !== value;
+  
+  const hanldeUndoneChange = useCallback(
+    (e, done, index) => {
+      const checked = e.target.checked;
+      if (!checked) {
+        let b = done.slice(index, index + 1);
+        // setdone(done);
+        setdone((olditems) => {
+          return olditems.filter((value, index) => {
+            const checkedvalue = e.target.value;
+            return checkedvalue !== value;
+          });
         });
-      });
-      setlist([...list, ...b]);
-    }
-  }
+        setlist([...list, ...b]);
+      }
+    },
+    [done]
+  );
+  
+  // function hanldeUndoneChange(e, done, index) {
+  //   const checked = e.target.checked;
+  //   if (!checked) {
+  //     let b = done.slice(index, index + 1);
+  //     // setdone(done);
+  //     setdone((olditems) => {
+  //       return olditems.filter((value, index) => {
+  //         const checkedvalue = e.target.value;
+  //         return checkedvalue !== value;
+  //       });
+  //     });
+  //     setlist([...list, ...b]);
+  //   }
+  // }
 
   function handleSort(e) {
     let value = e.target.value;
